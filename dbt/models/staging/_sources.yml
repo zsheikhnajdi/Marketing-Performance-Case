@@ -1,0 +1,27 @@
+version: 2
+
+# dlt schreibt in jede Zeile die Spalte _dlt_load_id, die ID des Load Packages.
+# Laut dlt-Dokumentation ist sie der Unix-Zeitstempel der Paketerstellung
+# (Text, z. B. '1758441600.123456') und steigt mit jeder Ladung.
+# Die Freshness-Prüfung nutzt diesen Zeitstempel. Für eine Grenze von 26 Stunden reicht das.
+# Für die eigentliche Load-Zeit wäre in Production _dlt_loads.inserted_at die eindeutigere
+# Quelle, weil sie nicht vom Format der ID abhängt.
+
+sources:
+  - name: shopify
+    schema: raw_shopify
+    loaded_at_field: "timestamp_seconds(cast(cast(_dlt_load_id as float64) as int64))"
+    freshness:
+      warn_after: {count: 26, period: hour}
+      error_after: {count: 48, period: hour}
+    tables:
+      - name: src_shopify_orders
+
+  - name: meta_ads
+    schema: raw_meta
+    loaded_at_field: "timestamp_seconds(cast(cast(_dlt_load_id as float64) as int64))"
+    freshness:
+      warn_after: {count: 26, period: hour}
+      error_after: {count: 48, period: hour}
+    tables:
+      - name: src_meta_insights

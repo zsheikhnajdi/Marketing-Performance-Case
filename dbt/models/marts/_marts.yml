@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: fct_marketing_performance
+    description: "Tägliche Marketing-Performance: Meta-Spend, Umsatz, Neukunden, Blended ROAS und CAC."
+    columns:
+      - name: report_date
+        tests:
+          - unique
+          - not_null
+      - name: blended_roas
+        description: "Gesamtumsatz des Shops / Meta-Spend. Kein von Meta attribuierter ROAS."
+      - name: blended_cac_eur
+        description: "Meta-Spend / Anzahl Neukunden. NULL, wenn es keine Neukunden gab."
+      - name: blended_roas_7d
+        description: "Blended ROAS über die letzten 7 Tage. Glättet den Versatz zwischen Klick und Kauf."
+      - name: blended_cac_7d_eur
+        description: "Blended CAC über die letzten 7 Tage."
